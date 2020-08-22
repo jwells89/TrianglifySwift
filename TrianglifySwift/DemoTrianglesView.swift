@@ -20,7 +20,7 @@ class DemoTrianglesView: TriangleContainer {
     }
 
     let animationDuration = 0.3
-    func tapped(recognizer: UITapGestureRecognizer) {
+    @objc func tapped(recognizer: UITapGestureRecognizer) {
         let triangleView = recognizer.view as! TriangleView
         UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseIn, animations: self.animationClosure(view: triangleView), completion:nil)
         let shuffled = self.triangleViews.shuffled()
@@ -32,7 +32,7 @@ class DemoTrianglesView: TriangleContainer {
         }
     }
 
-    func animateTriangles(triangles: [TriangleView], completion: @escaping (Void) -> Void) {
+    func animateTriangles(triangles: [TriangleView], completion: @escaping () -> Void) {
         var delay = animationDuration
 
         triangles.enumerated().forEach { idx, triangleView in
@@ -46,7 +46,7 @@ class DemoTrianglesView: TriangleContainer {
         }
     }
 
-    func animationClosure(view: UIView) -> (Void) -> Void {
+    func animationClosure(view: UIView) -> () -> Void {
         return {
             view.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             view.alpha = 0
@@ -87,7 +87,7 @@ extension MutableCollection where Indices.Iterator.Element == Index {
             let d: IndexDistance = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
             guard d != 0 else { continue }
             let i = index(firstUnshuffled, offsetBy: d)
-            swap(&self[firstUnshuffled], &self[i])
+            self.swapAt(firstUnshuffled, i)
         }
     }
 }

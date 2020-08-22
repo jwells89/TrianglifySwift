@@ -16,14 +16,14 @@ open class VerticesGenerator {
         let variance: CGFloat
         let seed: UInt64
 
-        init(size: CGSize = CGSize(width: 320, height: 320), cellSize: CGFloat = 80, variance: CGFloat = 0.75, seed: UInt64 = numericCast(arc4random())) {
+        public init(size: CGSize = CGSize(width: 320, height: 320), cellSize: CGFloat = 80, variance: CGFloat = 0.75, seed: UInt64 = numericCast(arc4random())) {
             self.size = size
             self.cellSize = cellSize
             self.variance = variance
             self.seed = seed
         }
     }
-    open static func generate(configuration: VerticesGenerator.Configuration = VerticesGenerator.Configuration()) -> [Vertex] {
+    public static func generate(configuration: VerticesGenerator.Configuration = VerticesGenerator.Configuration()) -> [Vertex] {
 
         // How many cells we're going to have on each axis (pad by 2 cells on each edge)
         let cellsX = (configuration.size.width + 4 * configuration.cellSize) / configuration.cellSize
