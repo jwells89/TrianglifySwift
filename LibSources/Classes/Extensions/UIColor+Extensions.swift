@@ -7,9 +7,14 @@
 //
 
 import Foundation
-import UIKit
 
-public extension UIColor {
+#if os(macOS)
+    import AppKit
+#else
+    import UIKit
+#endif
+
+public extension Color {
     var components: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
 
         var red: CGFloat = 0
@@ -28,7 +33,7 @@ public extension UIColor {
         return (r: red, g: green, b: blue, a: alpha)
     }
 
-    static func interpolateFrom(fromColor: UIColor, to toColor: UIColor, withProgress progress: CGFloat) -> UIColor {
+    static func interpolateFrom(fromColor: Color, to toColor: Color, withProgress progress: CGFloat) -> Color {
         if fromColor == toColor {
             return toColor
         }
@@ -40,10 +45,10 @@ public extension UIColor {
         let b = (1 - progress) * fromComponents.b + progress * toComponents.b
         let a = (1 - progress) * fromComponents.a + progress * toComponents.a
 
-        return UIColor(red: r, green: g, blue: b, alpha: a)
+        return Color(red: r, green: g, blue: b, alpha: a)
     }
 
-    static func interpolate(colors: [UIColor], progress: CGFloat) -> UIColor {
+    static func interpolate(colors: [Color], progress: CGFloat) -> Color {
         let idx1 = Int(floor(CGFloat((colors.count - 1)) * progress))
         let idx2 = Int(ceil(CGFloat((colors.count - 1)) * progress))
         let step = 1 / CGFloat(colors.count - 1)
@@ -51,15 +56,15 @@ public extension UIColor {
         let newProgress = (progress - offset) / step
         let color1 = colors[idx1]
         let color2 = colors[idx2]
-        let interpolatedColor = UIColor.interpolateFrom(fromColor: color1, to: color2, withProgress: newProgress)
+        let interpolatedColor = Color.interpolateFrom(fromColor: color1, to: color2, withProgress: newProgress)
         return interpolatedColor
     }
 
-    static func randomColor() -> UIColor {
+    static func randomColor() -> Color {
         let hue = CGFloat( Double.random() )  // 0.0 to 1.0
         let saturation: CGFloat = 0.5  // 0.5 to 1.0, away from white
         let brightness: CGFloat = 1.0  // 0.5 to 1.0, away from black
-        let color = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
+        let color = Color(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
         return color
     }
 }

@@ -6,7 +6,11 @@
 //  Copyright © 2016 zero. All rights reserved.
 //
 
-import UIKit
+#if os(macOS)
+    import AppKit
+#else
+    import UIKit
+#endif
 
 struct Edge: Hashable, Equatable {
     let vertex1: Vertex
