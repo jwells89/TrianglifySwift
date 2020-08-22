@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import CoreGraphics
 
 public extension Double {
     static func random() -> Double {
