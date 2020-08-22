@@ -51,13 +51,13 @@ open class Delaunay {
         let fabsy1y2 = abs(y1 - y2)
         let fabsy2y3 = abs(y2 - y3)
 
-        if fabsy1y2 < DBL_EPSILON {
+        if fabsy1y2 < .ulpOfOne {
             let m2 = -((x3 - x2) / (y3 - y2))
             let mx2 = (x2 + x3) / 2
             let my2 = (y2 + y3) / 2
             xc = (x2 + x1) / 2
             yc = m2 * (xc - mx2) + my2
-        } else if fabsy2y3 < DBL_EPSILON {
+        } else if fabsy2y3 < .ulpOfOne {
             let m1 = -((x2 - x1) / (y2 - y1))
             let mx1 = (x1 + x2) / 2
             let my1 = (y1 + y2) / 2
@@ -131,7 +131,7 @@ open class Delaunay {
 
         /* Make an array of indices into the vertex array, sorted by the
         * vertices' x-position. */
-        var indices = [Int](0..<n).sorted {  _vertices[$0].x < _vertices[$1].x }
+        let indices = [Int](0..<n).sorted {  _vertices[$0].x < _vertices[$1].x }
 
         /* Next, find the vertices of the supertriangle (which contains all other
         * triangles) */
@@ -167,7 +167,7 @@ open class Delaunay {
                 /* If we're outside the circumcircle, skip this triangle. */
                 let dy = _vertices[c].y - open[j].y
 
-                if dx * dx + dy * dy - open[j].rsqr > DBL_EPSILON {
+                if dx * dx + dy * dy - open[j].rsqr > .ulpOfOne {
                     continue
                 }
 
@@ -209,7 +209,7 @@ open class Delaunay {
 
         let ignored: Set<Vertex> = [_vertices[n], _vertices[n + 1], _vertices[n + 2]]
 
-        let results = completed.flatMap { (circumCircle) -> Triangle? in
+        let results = completed.compactMap { (circumCircle) -> Triangle? in
 
             let current: Set<Vertex> = [circumCircle.vertex1, circumCircle.vertex2, circumCircle.vertex3]
             let intersection = ignored.intersection(current)

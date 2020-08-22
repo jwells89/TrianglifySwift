@@ -28,7 +28,7 @@ public extension UIColor {
         return (r: red, g: green, b: blue, a: alpha)
     }
 
-    public static func interpolateFrom(fromColor: UIColor, to toColor: UIColor, withProgress progress: CGFloat) -> UIColor {
+    static func interpolateFrom(fromColor: UIColor, to toColor: UIColor, withProgress progress: CGFloat) -> UIColor {
         if fromColor == toColor {
             return toColor
         }
@@ -43,7 +43,7 @@ public extension UIColor {
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
 
-    public static func interpolate(colors: [UIColor], progress: CGFloat) -> UIColor {
+    static func interpolate(colors: [UIColor], progress: CGFloat) -> UIColor {
         let idx1 = Int(floor(CGFloat((colors.count - 1)) * progress))
         let idx2 = Int(ceil(CGFloat((colors.count - 1)) * progress))
         let step = 1 / CGFloat(colors.count - 1)
@@ -55,7 +55,7 @@ public extension UIColor {
         return interpolatedColor
     }
 
-    public static func randomColor() -> UIColor {
+    static func randomColor() -> UIColor {
         let hue = CGFloat( Double.random() )  // 0.0 to 1.0
         let saturation: CGFloat = 0.5  // 0.5 to 1.0, away from white
         let brightness: CGFloat = 1.0  // 0.5 to 1.0, away from black

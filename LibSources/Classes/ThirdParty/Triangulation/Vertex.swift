@@ -6,7 +6,7 @@
 //  Copyright © 2016 zero. All rights reserved.
 //
 
-public struct Vertex {
+public struct Vertex: Hashable, Equatable {
 
     public init(x: Double, y: Double) {
         self.x = x
@@ -15,16 +15,4 @@ public struct Vertex {
 
     public let x: Double
     public let y: Double
-}
-
-extension Vertex: Equatable { }
-
-public func ==(lhs: Vertex, rhs: Vertex) -> Bool {
-    return lhs.x == rhs.x && lhs.y == rhs.y
-}
-
-extension Vertex: Hashable {
-    public var hashValue: Int {
-        return "\(x)\(y)".hashValue
-    }
 }
