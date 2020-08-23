@@ -40,7 +40,7 @@ extension Array where Element:Equatable {
 }
 
 extension Triangle {
-    func toPath() -> CGPath {
+    public func toPath() -> CGPath {
 
         let path = CGMutablePath()
         let point1 = vertex1.pointValue()
@@ -57,11 +57,11 @@ extension Triangle {
         return path
     }
 
-    func offsetBy(_ offset: CGPoint) -> Triangle {
+    public func offsetBy(_ offset: CGPoint) -> Triangle {
         return Triangle(vertex1: vertex1.offsetBy(offset), vertex2: vertex2.offsetBy(offset), vertex3: vertex3.offsetBy(offset))
     }
 
-    func center() -> CGPoint {
+    public func center() -> CGPoint {
         let centerX = (vertex1.x + vertex2.x + vertex3.x) / 3
         let centerY = (vertex1.y + vertex2.y + vertex3.y) / 3
         return CGPoint(x: centerX, y: centerY)

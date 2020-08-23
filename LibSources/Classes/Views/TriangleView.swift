@@ -14,8 +14,8 @@ import AppKit
 public class TriangleView: NSView {
     public let triangle: Triangle
     public let style: Style
-    public var triangleLayer: CAShapeLayer {
-        return self.layer as! CAShapeLayer
+    public var triangleLayer: TriangleLayer {
+        return self.layer as! TriangleLayer
     }
     
     public var action: Selector?
@@ -26,7 +26,7 @@ public class TriangleView: NSView {
         self.style = style
         super.init(frame: CGRect.zero)
         self.layer = CAShapeLayer()
-        self.configure(layer: self.triangleLayer, for: self.triangle)
+        self.configure()
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -36,7 +36,7 @@ public class TriangleView: NSView {
     public override func viewDidMoveToSuperview() {
         super.viewDidMoveToSuperview()
         if self.superview != nil {
-            self.styleTriangleLayer()
+            triangleLayer.style()
         }
     }
     
@@ -48,14 +48,11 @@ public class TriangleView: NSView {
         _ = target.perform(action, with: self)
     }
     
-    public func configure(layer: CAShapeLayer, for triangle: Triangle) {
-        let trianglePath = triangle.toPath()
-        let triangleFrame = trianglePath.boundingBoxOfPath
-        let frameOffset = CGPoint(x: -triangleFrame.origin.x, y: -triangleFrame.origin.y)
-        let triangleInBounds = triangle.offsetBy(frameOffset)
-        layer.path = triangleInBounds.toPath()
-        layer.anchorPoint = CGPoint(x:triangleInBounds.center().x / triangleFrame.width, y:triangleInBounds.center().y / triangleFrame.height)
-        self.frame = triangleFrame
+    public func configure() {
+        triangleLayer.triangle = triangle
+        triangleLayer.triangleStyle = style
+        triangleLayer.configure()
+        frame = triangleLayer.frame
     }
 }
 
@@ -63,17 +60,20 @@ public class TriangleView: NSView {
 import UIKit
 
 open class TriangleView: UIView {
-    public let triangle: Triangle
-    public let style: Style
-    public var triangleLayer: CAShapeLayer {
-        return self.layer as! CAShapeLayer
+    var triangle: Triangle
+    var style: Style
+    
+    public var triangleLayer: TriangleLayer {
+        return self.layer as! TriangleLayer
     }
+    
+    open override class var layerClass: AnyClass { return TriangleLayer.self }
 
     public init(triangle: Triangle, style: Style = Style()) {
         self.triangle = triangle
         self.style = style
         super.init(frame: CGRect.zero)
-        self.configure(layer: self.triangleLayer, for: self.triangle)
+        self.configure()
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -86,32 +86,20 @@ open class TriangleView: UIView {
 
     open override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        if self.superview != nil {
-            self.styleTriangleLayer()
+        if superview != nil {
+            triangleLayer.style()
         }
     }
-
-    open override class var layerClass: AnyClass {
-        return CAShapeLayer.self
-    }
     
-    public func configure(layer: CAShapeLayer, for triangle: Triangle) {
-        let trianglePath = triangle.toPath()
-        let triangleFrame = trianglePath.boundingBoxOfPath
-        let frameOffset = CGPoint(x: -triangleFrame.origin.x, y: -triangleFrame.origin.y)
-        let triangleInBounds = triangle.offsetBy(frameOffset)
-        layer.path = triangleInBounds.toPath()
-        layer.anchorPoint = CGPoint(x:triangleInBounds.center().x / triangleFrame.width, y:triangleInBounds.center().y / triangleFrame.height)
-        self.frame = triangleFrame
+    public func configure() {
+        triangleLayer.triangle = triangle
+        triangleLayer.triangleStyle = style
+        triangleLayer.configure()
+        frame = triangleLayer.frame
     }
 }
 #endif
 
-extension TriangleView {
-    open func styleTriangleLayer() {
-        self.triangleLayer.fillColor = self.style.fillColorClosure(self).cgColor
-        self.triangleLayer.strokeColor = self.style.strokeColorClosure(self).cgColor
-        self.triangleLayer.lineWidth = self.style.strokeLineWidth
-        self.triangleLayer.backgroundColor = Color.clear.cgColor
-    }
+extension TriangleView: TriangleRenderer {
+    
 }
